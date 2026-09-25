@@ -15,8 +15,7 @@ Route::resource('books', BookController::class);
 Route::resource('categories', CategoryController::class)
     ->except(['show']);
 
-Route::resource('members', MemberController::class)
-    ->only(['index', 'create', 'store']);
+Route::resource('members', MemberController::class);
 
 Route::resource('loans', LoanController::class);
 

@@ -1,17 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Anggota')
+@section('title', 'Edit Anggota')
 
 @section('content')
 
-    <h1>Tambah Anggota</h1>
+    <h1>Edit Anggota</h1>
 
     <p>
         <a href="{{ route('members.index') }}">← Kembali ke Daftar Anggota</a>
     </p>
 
-    <form action="{{ route('members.store') }}" method="POST">
+    <form action="{{ route('members.update', $member['id']) }}" method="POST">
         @csrf
+        @method('PUT')
 
         <div>
             <label for="nama">Nama</label><br>
@@ -19,7 +20,7 @@
                 type="text"
                 id="nama"
                 name="nama"
-                value="{{ old('nama') }}"
+                value="{{ old('nama', $member['nama']) }}"
             >
             @error('nama')
                 <div style="color: red;">{{ $message }}</div>
@@ -34,7 +35,7 @@
                 type="text"
                 id="nim"
                 name="nim"
-                value="{{ old('nim') }}"
+                value="{{ old('nim', $member['nim']) }}"
             >
             @error('nim')
                 <div style="color: red;">{{ $message }}</div>
@@ -49,7 +50,7 @@
                 type="email"
                 id="email"
                 name="email"
-                value="{{ old('email') }}"
+                value="{{ old('email', $member['email']) }}"
             >
             @error('email')
                 <div style="color: red;">{{ $message }}</div>
@@ -64,7 +65,7 @@
                 type="text"
                 id="nomor_telepon"
                 name="nomor_telepon"
-                value="{{ old('nomor_telepon') }}"
+                value="{{ old('nomor_telepon', $member['nomor_telepon']) }}"
             >
             @error('nomor_telepon')
                 <div style="color: red;">{{ $message }}</div>
@@ -79,7 +80,7 @@
                 id="alamat"
                 name="alamat"
                 rows="4"
-            >{{ old('alamat') }}</textarea>
+            >{{ old('alamat', $member['alamat']) }}</textarea>
             @error('alamat')
                 <div style="color: red;">{{ $message }}</div>
             @enderror
@@ -91,10 +92,10 @@
             <label for="status">Status</label><br>
             <select id="status" name="status">
                 <option value="">-- Pilih Status --</option>
-                <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>
+                <option value="aktif" {{ old('status', $member['status']) == 'aktif' ? 'selected' : '' }}>
                     Aktif
                 </option>
-                <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>
+                <option value="nonaktif" {{ old('status', $member['status']) == 'nonaktif' ? 'selected' : '' }}>
                     Nonaktif
                 </option>
             </select>
@@ -105,7 +106,7 @@
 
         <br>
 
-        <button type="submit">Simpan</button>
+        <button type="submit">Simpan Perubahan</button>
     </form>
 
 @endsection
