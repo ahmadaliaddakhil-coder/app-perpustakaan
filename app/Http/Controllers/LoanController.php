@@ -7,7 +7,6 @@ use App\Models\Loan;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class LoanController extends Controller
 {
@@ -35,21 +34,19 @@ class LoanController extends Controller
             'tanggal_pinjam' => 'required|date',
             'tanggal_kembali' => 'required|date|after_or_equal:tanggal_pinjam',
             'book_ids' => 'required|array|min:1',
-            'book_ids.*' => 'required|integer|distinct|exists:books,id',
+            'book_ids.*' => 'integer|exists:books,id',
         ]);
 
-        DB::transaction(function () use ($validated): void {
-            $loan = Loan::create([
-                'member_id' => $validated['member_id'],
-                'user_id' => $validated['user_id'],
-                'tanggal_pinjam' => $validated['tanggal_pinjam'],
-                'tanggal_kembali' => $validated['tanggal_kembali'],
-            ]);
+        $loan = Loan::create([
+            'member_id' => $validated['member_id'],
+            'user_id' => $validated['user_id'],
+            'tanggal_pinjam' => $validated['tanggal_pinjam'],
+            'tanggal_kembali' => $validated['tanggal_kembali'],
+        ]);
 
-            foreach ($validated['book_ids'] as $bookId) {
-                $loan->loanItems()->create(['book_id' => $bookId]);
-            }
-        });
+        foreach ($validated['book_ids'] as $bookId) {
+            $loan->loanItems()->create(['book_id' => $bookId]);
+        }
 
         return redirect()->route('loans.index')
             ->with('success', 'Transaksi peminjaman berhasil dibuat.');
@@ -74,17 +71,15 @@ class LoanController extends Controller
         $loan = Loan::findOrFail($id);
 
         $validated = $request->validate([
-            'tanggal_kembali' => 'required|date|after_or_equal:'.$loan->tanggal_pinjam,
+            'tanggal_pinjam' => 'required|date',
+            'tanggal_kembali' => 'required|date|after_or_equal:tanggal_pinjam',
             'status' => 'required|in:dipinjam,dikembalikan,terlambat',
         ], [
             'tanggal_kembali.required' => 'Tanggal kembali wajib diisi.',
             'tanggal_kembali.after_or_equal' => 'Tanggal kembali tidak boleh sebelum tanggal pinjam.',
         ]);
 
-        $loan->update([
-            'tanggal_kembali' => $validated['tanggal_kembali'],
-            'status' => $validated['status'],
-        ]);
+        $loan->update($validated);
 
         return redirect()->route('loans.index')
             ->with('success', 'Transaksi peminjaman berhasil diperbarui.');
@@ -93,11 +88,8 @@ class LoanController extends Controller
     public function destroy(string $id)
     {
         $loan = Loan::findOrFail($id);
-
-        DB::transaction(function () use ($loan): void {
-            $loan->loanItems()->delete();
-            $loan->delete();
-        });
+        $loan->loanItems()->delete();
+        $loan->delete();
 
         return redirect()->route('loans.index')
             ->with('success', 'Transaksi peminjaman berhasil dihapus.');
@@ -106,11 +98,6 @@ class LoanController extends Controller
     public function kembalikan(string $id)
     {
         $loan = Loan::findOrFail($id);
-
-        if ($loan->status !== 'dipinjam') {
-            return redirect()->route('loans.index')
-                ->with('error', 'Hanya peminjaman berstatus dipinjam yang dapat dikembalikan.');
-        }
 
         $loan->update([
             'status' => 'dikembalikan',

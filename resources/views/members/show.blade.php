@@ -1,48 +1,48 @@
-@extends('layouts.app')
-
-@section('title', 'Detail Anggota')
-
-@section('content')
-
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail Anggota</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; max-width: 700px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+        .info th { width: 160px; background: #f3f4f6; }
+    </style>
+</head>
+<body>
     <h1>Detail Anggota</h1>
+    <p><a href="{{ route('members.index') }}">&larr; Kembali ke daftar anggota</a></p>
 
-    <p>
-        <a href="{{ route('members.index') }}">← Kembali ke Daftar Anggota</a>
-    </p>
-
-    <table>
+    <table class="info">
         <tr>
             <th>Nama</th>
             <td>{{ $member['nama'] }}</td>
         </tr>
-
         <tr>
             <th>NIM</th>
             <td>{{ $member['nim'] }}</td>
         </tr>
-
         <tr>
             <th>Email</th>
             <td>{{ $member['email'] }}</td>
         </tr>
-
         <tr>
             <th>Nomor Telepon</th>
             <td>{{ $member['nomor_telepon'] }}</td>
         </tr>
-
         <tr>
             <th>Alamat</th>
             <td>{{ $member['alamat'] }}</td>
         </tr>
-
         <tr>
             <th>Status</th>
-            <td>{{ $member['status'] }}</td>
+            <td>{{ ucfirst($member['status']) }}</td>
         </tr>
     </table>
 
     <h2>Riwayat Peminjaman</h2>
+    <p><em>Diambil lewat relasi <code>$member->loans</code> - satu anggota bisa punya banyak transaksi peminjaman.</em></p>
 
     <table>
         <thead>
@@ -74,5 +74,5 @@
             @endforelse
         </tbody>
     </table>
-
-@endsection
+</body>
+</html>

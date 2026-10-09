@@ -1,13 +1,20 @@
-@extends('layouts.app')
-
-@section('title', 'Detail Peminjaman')
-
-@section('content')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail Peminjaman</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; max-width: 600px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+        .info th { width: 160px; background: #f3f4f6; }
+    </style>
+</head>
+<body>
     <h1>Detail Peminjaman</h1>
-
     <p><a href="{{ route('loans.index') }}">&larr; Kembali ke daftar peminjaman</a></p>
 
-    <table>
+    <table class="info">
         <tr>
             <th>Anggota</th>
             <td>{{ $loan['member']['nama'] }} ({{ $loan['member']['nim'] }})</td>
@@ -30,11 +37,7 @@
         </tr>
         <tr>
             <th>Status</th>
-            <td>
-                <span class="badge badge-{{ $loan['status'] }}">
-                    {{ ucfirst($loan['status']) }}
-                </span>
-            </td>
+            <td>{{ ucfirst($loan['status']) }}</td>
         </tr>
     </table>
 
@@ -47,16 +50,13 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($loan['loanItems'] as $item)
+            @foreach ($loan['loanItems'] as $item)
                 <tr>
                     <td>{{ $item['book']['judul'] }}</td>
                     <td>{{ $item['book']['penulis'] }}</td>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="2">Transaksi ini tidak memiliki detail buku.</td>
-                </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
-@endsection
+</body>
+</html>
