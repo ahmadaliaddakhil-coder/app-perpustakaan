@@ -105,7 +105,7 @@
 
         <br>
 
-        <button type="submit">Simpan</button>
+        <button type="submit" class="btn">Simpan</button>
     </form>
 
 @endsection

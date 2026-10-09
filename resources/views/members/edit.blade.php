@@ -106,7 +106,7 @@
 
         <br>
 
-        <button type="submit">Simpan Perubahan</button>
+        <button type="submit" class="btn">Simpan Perubahan</button>
     </form>
 
 @endsection
