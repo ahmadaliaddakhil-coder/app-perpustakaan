@@ -21,7 +21,7 @@
                 <th>Penerbit</th>
                 <th>Tahun</th>
                 <th>Stok</th>
-                <th>ID Kategori</th>
+                <th>Kategori</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -35,7 +35,7 @@
                     <td>{{ $book['penerbit'] }}</td>
                     <td>{{ $book['tahun_terbit'] }}</td>
                     <td>{{ $book['stok'] }}</td>
-                    <td>{{ $book['category_id'] }}</td>
+                    <td>{{ $book['category']['nama_kategori'] }}</td>
 
                     <td>
                         <a href="{{ route('books.show', $book['id']) }}">
@@ -77,13 +77,5 @@
     <br>
 
     {{ $books->links() }}
-
-    <p>
-        <em>
-            Catatan: kolom kategori masih menampilkan ID.
-            Menampilkan nama kategori memerlukan Eloquent Relationship,
-            dipelajari di Pertemuan 7.
-        </em>
-    </p>
 
 @endsection
